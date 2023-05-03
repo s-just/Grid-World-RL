@@ -51,13 +51,20 @@ alpha = 0.1
 gamma = 0.99
 epsilon = 0.1
 
+# Define a simple form of memory for visuals
+
+
 for episode in range(num_episodes):
     #Some initial setup and debug for training
+    
+    
     print('********')
     print('performing episode', episode)
     print('********')
+    
     # Set the current state to be a random position.
     state = (np.random.randint(0,5), np.random.randint(0,5))
+  
     # If the agent hasn't reached the goal, begin the training process
     while state != goal_state:
         # Determine whether or not to make a random action or an action based on the max q values of the current state inside the Q-Table.
@@ -98,12 +105,14 @@ successes = 0
 total_reward = 0
 
 times_moved_history = {}
-
+mem = []
 for episode in range(num_episodes):
+    ep_mem = []
     print('********')
     print('performing testing w episode', episode)
     print('********')
     state = (np.random.randint(0, 5), np.random.randint(0, 5))
+    ep_mem.append(state)
     orig_state = state
     episode_reward = 0
     times_moved = 0
@@ -129,7 +138,7 @@ for episode in range(num_episodes):
             print('hitting wall at state:', state, 'with actions:',q_table[state[0], state[1], :])
             print('Q-table:')
             print(q_table)
-
+        ep_mem.append(next_state)
         reward = get_reward(state, action, next_state)
         episode_reward += reward
         
@@ -144,6 +153,7 @@ for episode in range(num_episodes):
     else:
         print('failed to reach goal')
     total_reward += episode_reward
+    mem.append(ep_mem)
 
 # Print the results
 print('Success Rate:', successes/num_episodes)
@@ -154,6 +164,9 @@ print(q_table)
 
 print('Move Count History (Count : (startpos):')
 print(times_moved_history)
+
+print("Episode Memories:")
+print(mem)
 
 
 
